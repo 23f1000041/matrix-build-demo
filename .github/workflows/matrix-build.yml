@@ -1,0 +1,37 @@
+name: Matrix Build with Artifacts
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+
+    steps:
+      - name: matrix-1dc9e1c
+        run: echo "Starting build for Python ${{ matrix.python-version }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Generate build artifact
+        run: |
+          echo "Build Report" > output.txt
+          echo "============" >> output.txt
+          echo "Python Version: ${{ matrix.python-version }}" >> output.txt
+          echo "Build Time: $(date)" >> output.txt
+          echo "Status: SUCCESS" >> output.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-1dc9e1c-py${{ matrix.python-version }}
+          path: output.txt
